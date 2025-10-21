@@ -55,4 +55,37 @@ export class AuthService {
     return { message: "User logged in successfully", user }
   }
 
+  async validateUser(user: any) {
+    const userExists = await this.prisma.user.findUnique({
+      where: { email: user.email },
+    });
+
+    if (userExists) {
+      return userExists;
+    }
+
+    const newUser = await this.prisma.user.create({
+      data: {
+        email: user.email,
+        name: user.name,
+        avatar: user.picture,
+        authProvider: 'google',
+        providerId: user.providerId,
+      },
+    });
+
+    return newUser;
+  }
+
+  async loginWithGoogle(user: any) {
+    const payload = {
+      email: user.email,
+      sub: user.id,
+    };
+
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
+
 }
