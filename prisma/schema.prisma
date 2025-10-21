@@ -8,15 +8,25 @@ datasource db {
 }
 
 model User {
-  id        String     @id @default(uuid())
-  name      String
-  email     String     @unique
-  password  String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  donations Donation[] @relation("userDonations")
+  id            String     @id @default(uuid())
+  name          String
+  email         String     @unique
+  password      String?
+  avatar        String?
+  emailVerified Boolean?   @default(false)
+  authProvider  String?
+  providerId    String?
+  role          Roles      @default(READER)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  donations     Donation[] @relation("userDonations")
 
   @@map("users")
+}
+
+enum Roles {
+  ADMIN
+  READER
 }
 
 enum PaymentStatus {
