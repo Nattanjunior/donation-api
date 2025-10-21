@@ -3,14 +3,35 @@ datasource db {
   url      = env("DB_URL")
 }
 
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  email     String     @unique
+  password  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  donations Donation[] @relation("userDonations")
 
-model User{
-  id String @id @default(uuid())
-  name String 
-  email String @unique 
-  password String 
+  @@map("users")
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+model Donation {
+  id     String @id @default(cuid())
+  amount Int
+
+  donorName    String
+  donorMessage String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("users")
+  status PaymentStatus @default(PENDING)
+  userId String
+  user   User           @relation("userDonations", fields: [userId], references: [id])
 }
