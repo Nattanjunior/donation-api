@@ -6,24 +6,23 @@ import { GoogleAuthGuard } from './guards/google-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-
-  constructor(readonly authService: AuthService) { }
+  constructor(readonly authService: AuthService) {}
 
   @Post('register') registerUser(@Body() createUserDto: CreateUserDto) {
-    return this.authService.registerUser(createUserDto)
+    return this.authService.registerUser(createUserDto);
   }
 
   @Post('login') loginUser(@Body() loginUserDto: LoginUserDto) {
-    return this.authService.loginUser(loginUserDto)
+    return this.authService.loginUser(loginUserDto);
   }
 
   @Get('google')
   @UseGuards(GoogleAuthGuard)
-  async googleAuth() { }
+  async googleAuth() {}
 
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
   googleAuthRedirect(@Req() req) {
-    return this.authService.loginWithGoogle(req.user)
+    return this.authService.loginWithGoogle(req.user);
   }
 }
