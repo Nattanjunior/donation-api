@@ -49,3 +49,4 @@ model Donation {
   userId String
   user   User          @relation("userDonations", fields: [userId], references: [id])
 }
+
